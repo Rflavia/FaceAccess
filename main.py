@@ -9,6 +9,16 @@ from abrir_terminal import abrir_terminal
 PASTA_ROSTOS = Path(__file__).resolve().parent / "rostos"
 
 
+def corrigir_nome(nome):
+    """Recupera acentos de arquivos antigos gravados com codificação incorreta."""
+    if "Ã" not in nome and "Â" not in nome:
+        return nome
+    try:
+        return nome.encode("cp1252").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return nome
+
+
 def carregar_rostos():
     """Carrega as fotos cadastradas e suas codificações faciais."""
     PASTA_ROSTOS.mkdir(exist_ok=True)
@@ -22,8 +32,9 @@ def carregar_rostos():
         codificacoes = face_recognition.face_encodings(imagem)
         if len(codificacoes) == 1:
             rostos_conhecidos.append(codificacoes[0])
-            nomes_conhecidos.append(arquivo.stem)
-            print(f"Rosto cadastrado: {arquivo.stem}")
+            nome = corrigir_nome(arquivo.stem)
+            nomes_conhecidos.append(nome)
+            print(f"Rosto cadastrado: {nome}")
         else:
             print(f"Foto ignorada (esperado um rosto): {arquivo.name}")
 
