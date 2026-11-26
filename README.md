@@ -33,7 +33,7 @@ O FaceAccess simula um terminal de controle de acesso por reconhecimento facial.
 ## Como executar (Windows)
 
 1. Instale o Python 3.12 de 64 bits.
-2. Clone o repositório e execute `instalar.bat`. Quando solicitado, informe o arquivo Dlib do professor compatível com Python 3.12 (`cp312-cp312-win_amd64.whl`).
+2. Clone o repositório e execute `instalar.bat`. Quando solicitado, informe o arquivo Dlib compatível com Python 3.12 (`cp312-cp312-win_amd64.whl`).
 3. Execute `cadastrar.bat`, informe o nome e pressione Espaço ou A para capturar a fotografia.
 4. Execute `iniciar.bat` para abrir o terminal com reconhecimento facial.
 
