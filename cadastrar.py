@@ -42,7 +42,7 @@ while True:
     tecla = cv2.waitKey(1) & 0xFF
 
     # Capturar imagem
-    if tecla == ord("a"):
+    if tecla in (ord("a"), ord(" ")):
         caminho = os.path.join(
             PASTA_ROSTOS,
             nome + ".jpg"
