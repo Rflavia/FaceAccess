@@ -4,11 +4,11 @@
 
 Use Python 3.12 de 64 bits e Git. Execute `instalar.bat` com dois cliques. O instalador configura o ambiente `.venv` e instala a interface. Para instalar o reconhecimento, informe o caminho do arquivo Dlib do professor (`cp312-cp312-win_amd64.whl`). Se ainda não tiver o arquivo, pressione Enter e teste apenas o visual.
 
-- `iniciar.bat`: abre a interface visual FaceAccess.
+- `iniciar.bat`: abre o FaceAccess com reconhecimento e interface integrados.
 - `cadastrar.bat`: cadastra uma fotografia local após a instalação.
-- `reconhecimento.bat`: abre o reconhecimento original após a instalação completa e cadastro de uma pessoa.
+- `reconhecimento.bat`: abre o mesmo terminal integrado.
 
-O visual e o reconhecimento ainda são executados separadamente. As imagens cadastradas ficam locais, fora do Git.
+Para testar apenas a interface, execute `.\.venv\Scripts\python.exe abrir_terminal.py`. As imagens cadastradas ficam locais, fora do Git.
 
 
 Projeto acadêmico desenvolvido para a disciplina de Visão Computacional, utilizando Python, Dlib e OpenCV para detecção e reconhecimento facial por meio de uma webcam.
@@ -22,7 +22,7 @@ O sistema permite cadastrar pessoas através de fotografias capturadas pela câm
 - Detecção facial em tempo real.
 - Reconhecimento de pessoas previamente cadastradas.
 - Identificação de rostos não cadastrados como "Desconhecido".
-- Exibição dos resultados com caixas delimitadoras.
+- Exibição dos resultados na barra inferior do terminal, com cenário de catracas e scanner.
 
 ## 2. Tecnologias utilizadas
 
@@ -170,7 +170,7 @@ O sistema realizará as seguintes operações:
 3. Inicializará a webcam.
 4. Detectará os rostos presentes na imagem.
 5. Comparará os rostos encontrados com os cadastrados.
-6. Exibirá o nome da pessoa identificada ou "Desconhecido".
+6. Exibirá o nome e o resultado de acesso na barra inferior da interface.
 
 Para encerrar a execução, pressione `Q`.
 
