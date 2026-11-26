@@ -41,11 +41,11 @@ if errorlevel 1 goto :erro
 if errorlevel 1 goto :erro
 "%PY%" -c "import dlib, face_recognition, face_recognition_models"
 if errorlevel 1 goto :erro
-echo Instalacao completa. Interface e reconhecimento disponiveis separadamente.
+echo Instalacao completa. Interface e reconhecimento integrados. Execute iniciar.bat.
 pause
 exit /b 0
 :somente_visual
-echo Visual disponivel. Execute iniciar.bat.
+echo Visual disponivel. Execute .venv\Scripts\python.exe abrir_terminal.py.
 echo Para instalar o reconhecimento depois, execute instalar.bat novamente.
 pause
 exit /b 0
