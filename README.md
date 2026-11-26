@@ -1,213 +1,44 @@
-# Sistema de Reconhecimento Facial
+# FaceAccess — Reconhecimento Facial
 
-## Instalação rápida (Windows)
+Projeto acadêmico desenvolvido para a disciplina de **Visão Computacional**, da pós-graduação em **Data Science e Inteligência Artificial — Senac**.
 
-Use Python 3.12 de 64 bits e Git. Execute `instalar.bat` com dois cliques. O instalador configura o ambiente `.venv` e instala a interface. Para instalar o reconhecimento, informe o caminho do arquivo Dlib do professor (`cp312-cp312-win_amd64.whl`). Se ainda não tiver o arquivo, pressione Enter e teste apenas o visual.
+O FaceAccess simula um terminal de controle de acesso por reconhecimento facial. O sistema compara o rosto capturado pela webcam com as fotografias cadastradas localmente e apresenta o resultado de identificação em uma interface personalizada.
 
-- `iniciar.bat`: abre o FaceAccess com reconhecimento e interface integrados.
-- `cadastrar.bat`: cadastra uma fotografia local após a instalação.
-- `reconhecimento.bat`: abre o mesmo terminal integrado.
+## Interface
 
-Para testar apenas a interface, execute `.\.venv\Scripts\python.exe abrir_terminal.py`. As imagens cadastradas ficam locais, fora do Git.
+<p align="center">
+  <img src="assets/images/preview_interface.svg" width="340" alt="Prévia ilustrativa do terminal FaceAccess">
+</p>
 
+*Prévia ilustrativa do terminal aguardando identificação.*
 
-Projeto acadêmico desenvolvido para a disciplina de Visão Computacional, utilizando Python, Dlib e OpenCV para detecção e reconhecimento facial por meio de uma webcam.
+## Funcionalidades
 
-O sistema permite cadastrar pessoas através de fotografias capturadas pela câmera e identificar rostos previamente cadastrados durante a execução do reconhecimento facial.
+- Cadastro facial pela webcam.
+- Reconhecimento de rostos cadastrados em tempo real.
+- Simulação de acesso liberado ou negado.
+- Interface com cenário de catracas, remoção de fundo, scanner animado e mensagens de identificação.
 
-## 1. Funcionalidades
-
-- Cadastro de pessoas por meio da webcam.
-- Armazenamento das fotografias cadastradas.
-- Detecção facial em tempo real.
-- Reconhecimento de pessoas previamente cadastradas.
-- Identificação de rostos não cadastrados como "Desconhecido".
-- Exibição dos resultados na barra inferior do terminal, com cenário de catracas e scanner.
-
-## 2. Tecnologias utilizadas
+## Tecnologias utilizadas
 
 | Tecnologia | Finalidade |
 |---|---|
-| Python | Linguagem de programação |
-| Dlib | Biblioteca de visão computacional |
-| Face Recognition | Detecção e reconhecimento facial |
+| Python 3.12 | Linguagem de programação |
 | OpenCV | Captura e processamento de imagens |
-| NumPy | Operações numéricas |
-| Matplotlib | Visualização de dados |
+| Dlib e Face Recognition | Detecção e reconhecimento facial |
+| MediaPipe | Remoção do fundo da webcam |
+| CustomTkinter | Interface gráfica |
+| Pillow e NumPy | Manipulação de imagens e operações numéricas |
 
-## 3. Estrutura do projeto
+## Como executar (Windows)
 
-```text
-Apresentação facial/
-│
-├── main.py
-├── cadastrar.py
-├── requirements.txt
-├── README.md
-│
-└── rostos/
-    ├── clara.jpg
-    ├── pessoa2.jpg
-    └── pessoa3.jpg
-```
+1. Instale o Python 3.12 de 64 bits.
+2. Clone o repositório e execute `instalar.bat`. Quando solicitado, informe o arquivo Dlib do professor compatível com Python 3.12 (`cp312-cp312-win_amd64.whl`).
+3. Execute `cadastrar.bat`, informe o nome e pressione Espaço ou A para capturar a fotografia.
+4. Execute `iniciar.bat` para abrir o terminal com reconhecimento facial.
 
-## 4. Pré-requisitos
+As fotografias permanecem na pasta local `rostos/` e não são enviadas ao Git.
 
-Antes de iniciar a instalação, é necessário possuir:
+O reconhecimento está no `main.py`, o cadastro no `cadastrar.py` e a interface no `design.py`.
 
-- Windows 10 ou Windows 11.
-- Python.
-- Visual Studio Code.
-- Git instalado.
-- Webcam funcional.
-- Arquivo pré-compilado do Dlib disponibilizado pelo professor.
-
-**Importante:** o arquivo `.whl` do Dlib deve ser compatível com a versão do Python e a arquitetura do sistema operacional utilizados.
-
-## 5. Instalação e configuração
-
-### 5.1. Obter o projeto
-
-Clone o repositório:
-
-```bash
-git clone URL_DO_REPOSITORIO
-```
-
-Entre na pasta:
-
-```bash
-cd "Apresentação facial"
-```
-
-Caso tenha recebido o projeto em ZIP, extraia os arquivos e abra a pasta no VS Code.
-
-### 5.2. Criar o ambiente virtual
-
-```powershell
-python -m venv .venv
-```
-
-### 5.3. Ativar o ambiente virtual
-
-```powershell
-.venv\Scripts\activate
-```
-
-### 5.4. Instalar o Dlib
-
-O professor disponibilizou um arquivo pré-compilado da biblioteca Dlib, no formato `.whl`, para facilitar sua instalação no Windows.
-
-```
-
-Verifique se a instalação foi realizada:
-
-```powershell
-python -c "import dlib; print(dlib.__version__)"
-```
-
-### 5.5. Instalar as demais dependências
-
-Após instalar o Dlib, execute:
-
-```powershell
-python -m pip install --upgrade pip
-```
-
-Em seguida:
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-**Observação:** a biblioteca `face_recognition_models` é obtida diretamente do GitHub. Por isso, é necessário ter o Git instalado e disponível no terminal.
-
-### 5.6. Verificar a instalação
-
-Execute:
-
-```powershell
-python -c "import cv2, dlib, face_recognition, face_recognition_models; print('Ambiente configurado com sucesso!')"
-```
-
-Se aparecer a mensagem de sucesso, as principais dependências foram carregadas corretamente.
-
-## 6. Como executar o projeto
-
-O projeto possui dois programas independentes.
-
-### 6.1. Cadastro facial
-
-Para cadastrar uma pessoa, execute:
-
-```powershell
-python cadastrar.py
-```
-
-O programa solicitará o nome da pessoa e abrirá a webcam.
-
-Passo a passo:
-
-1. Informe o nome da pessoa.
-2. Posicione o rosto diante da câmera.
-3. Pressione `a` para capturar a fotografia.
-4. A imagem será salva automaticamente na pasta `rostos/`.
-
-Para cancelar, pressione `Q`.
-
-### 6.2. Reconhecimento facial
-
-Após realizar os cadastros, execute:
-
-```powershell
-python main.py
-```
-
-O sistema realizará as seguintes operações:
-
-1. Carregará as fotografias cadastradas.
-2. Gerará as codificações faciais.
-3. Inicializará a webcam.
-4. Detectará os rostos presentes na imagem.
-5. Comparará os rostos encontrados com os cadastrados.
-6. Exibirá o nome e o resultado de acesso na barra inferior da interface.
-
-Para encerrar a execução, pressione `Q`.
-
-## 7. Funcionamento técnico
-
-O reconhecimento facial ocorre por meio de quatro etapas:
-
-**Detecção facial:** identifica a localização dos rostos presentes na imagem.
-
-**Codificação facial:** transforma as características do rosto em uma representação numérica.
-
-**Comparação:** calcula a distância entre a codificação do rosto capturado e as codificações cadastradas.
-
-**Identificação:** verifica se a menor distância está dentro do limite estabelecido no código.
-
-O sistema utiliza inicialmente o limite de distância `0.50`, que pode ser ajustado durante os testes.
-
-Esse valor não representa uma porcentagem de confiança.
-
-## 8. Considerações sobre instalação
-
-O arquivo pré-compilado do Dlib não está incluído no `requirements.txt`, pois sua instalação é realizada separadamente, utilizando o arquivo `.whl` fornecido pelo professor.
-
-A compatibilidade do arquivo depende da versão do Python e da arquitetura do sistema.
-
-Recomenda-se utilizar a mesma versão do Python entre os integrantes do grupo para evitar problemas de instalação.
-
-## 9. Privacidade e uso responsável
-
-As fotografias utilizadas devem ser obtidas com autorização das pessoas envolvidas.
-
-As imagens cadastradas são armazenadas localmente na pasta `rostos/`.
-
-O projeto possui finalidade acadêmica e experimental, não devendo ser utilizado como único mecanismo de autenticação ou identificação de pessoas.
-
----
-
-**Projeto acadêmico de Visão Computacional**
-
-Desenvolvido com Python, Dlib, Face Recognition e OpenCV.
+> Protótipo acadêmico. A catraca e as mensagens representam uma simulação; o projeto não deve ser utilizado como mecanismo único de autenticação real.
