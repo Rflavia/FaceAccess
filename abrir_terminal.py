@@ -1,6 +1,6 @@
 
 import customtkinter as ctk
-from interface.terminal import TerminalAcesso
+from design import TerminalAcesso
 
 ctk.set_appearance_mode("dark")
 

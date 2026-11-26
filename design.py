@@ -10,7 +10,7 @@ import customtkinter as ctk
 from PIL import Image, ImageDraw, ImageFont
 
 
-BASE = Path(__file__).resolve().parent.parent
+BASE = Path(__file__).resolve().parent
 FUNDO_IMAGEM = BASE / "assets" / "images" / "fundo_catracas.png"
 MODELO_ROSTO = BASE / "modelos" / "haarcascade_frontalface_default.xml"
 VERDE = "#32FF80"

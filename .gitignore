@@ -1,13 +1,15 @@
+# Ambiente virtual
 .venv/
 venv/
+env/
+
+# Cache do Python
 __pycache__/
 *.py[cod]
-*.db
-*.db-journal
-*.db-wal
-*.db-shm
-assets/rostos_cadastrados/
-.env
-.env.*
-!.env.example
+
+# Configurações locais
 .vscode/
+
+# Arquivos temporários
+*.log
+rostos/
