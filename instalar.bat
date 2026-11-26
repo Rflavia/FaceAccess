@@ -3,7 +3,14 @@ setlocal
 cd /d "%~dp0"
 echo === FaceAccess - Instalacao ===
 if not exist ".venv\Scripts\python.exe" (
-    py -3.12 -m venv .venv
+    where py >nul 2>&1
+    if errorlevel 1 (
+        python -c "import sys, struct; assert sys.version_info[:2] == (3,12) and struct.calcsize('P') == 8"
+        if errorlevel 1 goto :erro_python
+        python -m venv .venv
+    ) else (
+        py -3.12 -m venv .venv
+    )
     if errorlevel 1 goto :erro_python
 )
 set "PY=%CD%\.venv\Scripts\python.exe"
