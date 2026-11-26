@@ -1,6 +1,7 @@
 
 import cv2
 import os
+from pathlib import Path
 """
 O programa vai:
 1. Solicitar o nome da pessoa.
@@ -52,7 +53,11 @@ while True:
             print("Já existe uma pessoa cadastrada com esse nome.")
             continue
 
-        cv2.imwrite(caminho, frame)
+        sucesso, dados = cv2.imencode(".jpg", frame)
+        if not sucesso:
+            print("Não foi possível codificar a foto.")
+            continue
+        Path(caminho).write_bytes(dados.tobytes())
         print(f"Cadastro salvo: {caminho}")
         break
 
