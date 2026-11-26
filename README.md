@@ -1,5 +1,16 @@
 # Sistema de Reconhecimento Facial
 
+## Instalação rápida (Windows)
+
+Use Python 3.12 de 64 bits e Git. Execute `instalar.bat` com dois cliques. O instalador configura o ambiente `.venv` e instala a interface. Para instalar o reconhecimento, informe o caminho do arquivo Dlib do professor (`cp312-cp312-win_amd64.whl`). Se ainda não tiver o arquivo, pressione Enter e teste apenas o visual.
+
+- `iniciar.bat`: abre a interface visual FaceAccess.
+- `cadastrar.bat`: cadastra uma fotografia local após a instalação.
+- `reconhecimento.bat`: abre o reconhecimento original após a instalação completa e cadastro de uma pessoa.
+
+O visual e o reconhecimento ainda são executados separadamente. As imagens cadastradas ficam locais, fora do Git.
+
+
 Projeto acadêmico desenvolvido para a disciplina de Visão Computacional, utilizando Python, Dlib e OpenCV para detecção e reconhecimento facial por meio de uma webcam.
 
 O sistema permite cadastrar pessoas através de fotografias capturadas pela câmera e identificar rostos previamente cadastrados durante a execução do reconhecimento facial.
