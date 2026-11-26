@@ -58,13 +58,14 @@ def fonte(tamanho, negrito=False):
 
 class TerminalAcesso(ctk.CTkFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, reconhecer=None):
         super().__init__(
             master,
             fg_color="#000000",
             corner_radius=0
         )
 
+        self.reconhecer = reconhecer
         self.ativo = True
         self.camera = None
         self.detector = None
@@ -358,7 +359,8 @@ class TerminalAcesso(ctk.CTkFrame):
             return
 
         try:
-            self.iniciar_detector()
+            if self.reconhecer is None:
+                self.iniciar_detector()
             self.iniciar_segmentacao()
             self.iniciar_camera()
 
@@ -545,32 +547,39 @@ class TerminalAcesso(ctk.CTkFrame):
             # DETECCAO FACIAL
             rostos = []
 
-            if (
-                self.detector is not None
-                and self._quadros % 3 == 0
-            ):
-                cinza = cv2.cvtColor(
-                    frame,
-                    cv2.COLOR_BGR2GRAY
-                )
-
-                rostos = self.detector.detectMultiScale(
-                    cinza,
-                    scaleFactor=1.1,
-                    minNeighbors=5,
-                    minSize=(60, 60)
-                )
-
-                if len(rostos):
-                    self._ultimo_rosto = max(
-                        rostos,
-                        key=lambda r: r[2] * r[3]
+            if self.reconhecer is not None:
+                # O reconhecimento recebe o frame original, sem efeitos visuais.
+                if self._quadros == 1 or self._quadros % 3 == 0:
+                    self._ultimo_rosto, self.nome_identificado, self.resultado_acesso = self.reconhecer(frame)
+                if self._ultimo_rosto is not None:
+                    rostos = [self._ultimo_rosto]
+            else:
+                if (
+                    self.detector is not None
+                    and self._quadros % 3 == 0
+                ):
+                    cinza = cv2.cvtColor(
+                        frame,
+                        cv2.COLOR_BGR2GRAY
                     )
-                else:
-                    self._ultimo_rosto = None
 
-            elif self._ultimo_rosto is not None:
-                rostos = [self._ultimo_rosto]
+                    rostos = self.detector.detectMultiScale(
+                        cinza,
+                        scaleFactor=1.1,
+                        minNeighbors=5,
+                        minSize=(60, 60)
+                    )
+
+                    if len(rostos):
+                        self._ultimo_rosto = max(
+                            rostos,
+                            key=lambda r: r[2] * r[3]
+                        )
+                    else:
+                        self._ultimo_rosto = None
+
+                elif self._ultimo_rosto is not None:
+                    rostos = [self._ultimo_rosto]
 
             imagem = Image.fromarray(fundo)
             desenho = ImageDraw.Draw(
@@ -731,18 +740,19 @@ class TerminalAcesso(ctk.CTkFrame):
             )
 
             # MENSAGENS DE ACESSO
+            cor_status = (255, 255, 255, 255)
             if (
                 self.resultado_acesso is True
                 and self.nome_identificado
             ):
-                titulo = "Acesso autorizado"
-                subtitulo = (
-                    f"Bem-vinda, {self.nome_identificado}!"
-                )
+                titulo = f"Bem-vindo(a), {self.nome_identificado}!"
+                subtitulo = "Acesso liberado"
+                cor_status = (50, 255, 128, 255)
 
             elif self.resultado_acesso is False:
-                titulo = "Acesso nao autorizado"
-                subtitulo = "Procure a administracao"
+                titulo = "Pessoa não reconhecida"
+                subtitulo = "Acesso negado"
+                cor_status = (255, 100, 100, 255)
 
             elif detectado:
                 titulo = "Rosto localizado"
@@ -770,7 +780,7 @@ class TerminalAcesso(ctk.CTkFrame):
                 ),
                 titulo,
                 font=fonte(16, True),
-                fill=(255, 255, 255, 255)
+                fill=cor_status
             )
 
             desenho.text(
@@ -796,6 +806,9 @@ class TerminalAcesso(ctk.CTkFrame):
             )
 
         except Exception as erro:
+            self.nome_identificado = None
+            self.resultado_acesso = None
+            self._ultimo_rosto = None
             mensagem = str(erro)
 
             if mensagem != self._mensagem_erro:
