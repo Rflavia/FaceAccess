@@ -1,6 +1,7 @@
 
 from pathlib import Path
 from datetime import datetime
+from time import monotonic
 import tempfile
 import shutil
 
@@ -84,6 +85,8 @@ class TerminalAcesso(ctk.CTkFrame):
 
         self.nome_identificado = None
         self.resultado_acesso = None
+        self._inicio_identificacao = None
+        self._chave_identificacao = None
         self._mensagem_erro = None
 
         if not FUNDO_IMAGEM.is_file():
@@ -450,6 +453,35 @@ class TerminalAcesso(ctk.CTkFrame):
         print("Webcam iniciada!")
         self.atualizar_camera()
 
+    def mensagem_acesso(self, detectado, agora=None):
+        """Controla somente a apresentação visual da identificação."""
+        neutro = (255, 255, 255, 255)
+        agora = monotonic() if agora is None else agora
+
+        if not detectado:
+            self._inicio_identificacao = None
+            self._chave_identificacao = None
+            return "Aproxime seu rosto", "Posicione-se diante da câmera", neutro
+
+        if self.reconhecer is None:
+            return "Rosto localizado", "Aguardando identificação", neutro
+
+        chave = (self.resultado_acesso, self.nome_identificado)
+        if self._inicio_identificacao is None or chave != self._chave_identificacao:
+            self._inicio_identificacao = agora
+            self._chave_identificacao = chave
+
+        decorrido = agora - self._inicio_identificacao
+        if decorrido < 1:
+            return "Rosto localizado", "Mantenha-se imóvel", neutro
+        if decorrido < 3 or self.resultado_acesso is None:
+            return "Identificando...", "Aguarde a verificação facial", neutro
+
+        # O resultado permanece visível enquanto o mesmo rosto está presente.
+        if self.resultado_acesso is True and self.nome_identificado:
+            return f"Bem-vindo(a), {self.nome_identificado}!", "Acesso liberado", (50, 255, 128, 255)
+        return "Pessoa não reconhecida", "Acesso negado", (255, 100, 100, 255)
+
     # ATUALIZAR CAMERA
     def atualizar_camera(self):
         if not self.ativo or self.camera is None:
@@ -679,6 +711,9 @@ class TerminalAcesso(ctk.CTkFrame):
                             width=4
                         )
 
+            titulo, subtitulo, cor_status = self.mensagem_acesso(detectado)
+            cor_borda = (230, 236, 240, 160) if cor_status == (255, 255, 255, 255) else cor_status
+
             # CAIXA TRANSPARENTE
             margem = max(
                 12,
@@ -700,8 +735,8 @@ class TerminalAcesso(ctk.CTkFrame):
                 ),
                 radius=19,
                 fill=(7, 11, 15, 130),
-                outline=(230, 236, 240, 160),
-                width=1
+                outline=cor_borda,
+                width=2 if cor_borda == cor_status else 1
             )
 
             # ICONE DE PESSOA
@@ -738,29 +773,6 @@ class TerminalAcesso(ctk.CTkFrame):
                 fill=(245, 248, 250, 140),
                 width=1
             )
-
-            # MENSAGENS DE ACESSO
-            cor_status = (255, 255, 255, 255)
-            if (
-                self.resultado_acesso is True
-                and self.nome_identificado
-            ):
-                titulo = f"Bem-vindo(a), {self.nome_identificado}!"
-                subtitulo = "Acesso liberado"
-                cor_status = (50, 255, 128, 255)
-
-            elif self.resultado_acesso is False:
-                titulo = "Pessoa não reconhecida"
-                subtitulo = "Acesso negado"
-                cor_status = (255, 100, 100, 255)
-
-            elif detectado:
-                titulo = "Rosto localizado"
-                subtitulo = "Aguardando identificacao"
-
-            else:
-                titulo = "Aproxime seu rosto"
-                subtitulo = "Posicione-se diante da camera"
 
             limite = max(
                 10,
@@ -809,6 +821,8 @@ class TerminalAcesso(ctk.CTkFrame):
             self.nome_identificado = None
             self.resultado_acesso = None
             self._ultimo_rosto = None
+            self._inicio_identificacao = None
+            self._chave_identificacao = None
             mensagem = str(erro)
 
             if mensagem != self._mensagem_erro:
